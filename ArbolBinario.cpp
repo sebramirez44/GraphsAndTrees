@@ -10,6 +10,7 @@ int main(){
     int *izq = arbol->getHijoMasIzq();
 
     // arbol->eliminar(new int(6));
-    arbol->printEnOrden(arbol);
+    // arbol->printEnOrden(arbol);
+    std::cout << "Arbol mas izquierdo: " << *izq << endl;
     return 0;
 }

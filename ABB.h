@@ -120,7 +120,7 @@ public:
 			return;
 		}
 		
-		if (*dato->getRaiz() == 4){
+		if (dato == *this->raiz->getHijoMasDer()){
 		 	std::cout << "no se lol" << std::endl;
 		 	return;
 		}
@@ -128,7 +128,6 @@ public:
 		printEnOrden(this->izq);
 		std::cout << *dato->getRaiz() << std::endl;
 		if (this->der != NULL){
-
 			printEnOrden(this->der);
 		}
 		
