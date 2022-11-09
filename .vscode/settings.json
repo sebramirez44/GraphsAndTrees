@@ -88,6 +88,7 @@
         "__tuple": "cpp",
         "ios": "cpp",
         "locale": "cpp",
-        "__functional_base": "cpp"
+        "__functional_base": "cpp",
+        "stack": "cpp"
     }
 }

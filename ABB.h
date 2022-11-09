@@ -1,11 +1,14 @@
 #pragma once
 #include <iostream>
+
+
 using namespace std;
 template<class T> class ABB{
 protected:
     T* raiz;
     ABB<T>* izq;
     ABB<T>* der;
+	
 public:
     ABB(){
         this->raiz = NULL;
@@ -32,10 +35,7 @@ public:
 
             return true;
         }
-		// std::cout << *this->der->getRaiz() << std::endl;
-        // if ((*this->raiz) == (*dato)){ //retornamos falso porque el elemento ya esta en el arbol
-        //     return false;
-        // }
+	
         if ((*dato) < (*this->raiz)){ //si es menor al dato lo ponemos en la izquierda.
 			if (this->izq == NULL){
 				this->izq = new ABB<T>(dato);
@@ -44,8 +44,6 @@ public:
             return this->izq->adicionar(dato);
             // return false;
         }
-		//else causa infinite loop
-
         else {
 			if (this->der == NULL){
 				this->der = new ABB<T>(dato);
@@ -178,6 +176,8 @@ public:
 			printPreOrden(dato->der);
 		}
 	}
+
+	
 
     int getSubArbolesConUnDescendiente()
 	{
