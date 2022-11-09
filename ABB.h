@@ -14,8 +14,8 @@ public:
     };
     ABB(T* dato){
         this->raiz = dato;
-        this->izq = new ABB<T>();
-        this->der = new ABB<T>();
+        this->izq = NULL;
+        this->der = NULL;
 
     };
     ~ABB(){
@@ -27,24 +27,61 @@ public:
     bool adicionar(T* dato){
         if(esVacio()){
             this->raiz = dato;
-            this->izq = new ABB<T>();
-            this->der = new ABB<T>();
+            this->izq = NULL;
+            this->der = NULL;
+
             return true;
         }
-        if ((*this->raiz) == (*dato)){ //retornamos falso porque el elemento ya esta en el arbol
-            return false;
-        }
+		// std::cout << *this->der->getRaiz() << std::endl;
+        // if ((*this->raiz) == (*dato)){ //retornamos falso porque el elemento ya esta en el arbol
+        //     return false;
+        // }
         if ((*dato) < (*this->raiz)){ //si es menor al dato lo ponemos en la izquierda.
+			if (this->izq == NULL){
+				this->izq = new ABB<T>(dato);
+				return true;
+			}
             return this->izq->adicionar(dato);
             // return false;
         }
+		//else causa infinite loop
+
         else {
+			if (this->der == NULL){
+				this->der = new ABB<T>(dato);
+				return true;
+			}
             return this->der->adicionar(dato);
             // return false;
         }
         return false;
 
     };//cambiar para BST
+	void add(T* dato){
+		
+		std::cout << *this->raiz << std::endl;
+
+		if(esVacio()){
+            this->raiz = dato;
+            this->izq = NULL;
+            this->der = NULL;
+            return;
+        }
+
+		T* temp = this->raiz;
+
+		if (*dato > *this->raiz && der->getRaiz() != NULL){
+
+			this->der->adicionar(dato);
+	 	}
+		else{
+			this->raiz = dato;
+			this->add(dato);
+		}
+		
+		
+
+	};
     bool eliminar(T* raiz)
 	{
 		if ((*this->raiz) == (*raiz))
@@ -107,31 +144,41 @@ public:
 
 	T* getHijoMasIzq()
 	{
-
 		return this->izq->esVacio() ? this->raiz : this->izq->getHijoMasIzq();
 	};
+	ABB<T>* getHijoIzq(){
+		return this->izq;
+	}
 
 	T* getHijoMasDer()
 	{
 		return this->der->esVacio() ? this->raiz : this->der->getHijoMasDer();
 	};
-    void printEnOrden(ABB<T>* dato){
-		if (dato == NULL || dato == 0){
-			return;
+	void printEnOrdenOne(ABB<T>* arbol){
+		if (arbol !=NULL) {
+			printEnOrdenOne(arbol->izq);
+			cout << *arbol->getRaiz() << endl;
+			printEnOrdenOne(arbol->der);
+		}	
+	}
+    
+    
+	void printPosOrden(ABB<T>* dato){
+		if (dato != NULL){
+			printPosOrden(dato->izq);
+			printPosOrden(dato->der);
+			cout << *dato->getRaiz() << endl;
 		}
-		
-		if (dato == *this->raiz->getHijoMasDer()){
-		 	std::cout << "no se lol" << std::endl;
-		 	return;
+	}
+
+	void printPreOrden(ABB<T>* dato){
+		if (dato != NULL){
+			cout << *dato->getRaiz() << endl;
+			printPreOrden(dato->izq);
+			printPreOrden(dato->der);
 		}
-		
-		printEnOrden(this->izq);
-		std::cout << *dato->getRaiz() << std::endl;
-		if (this->der != NULL){
-			printEnOrden(this->der);
-		}
-		
-    }
+	}
+
     int getSubArbolesConUnDescendiente()
 	{
 		if (esHoja())

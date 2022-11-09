@@ -4,13 +4,22 @@
 using namespace std;
 int main(){
     cout << "Hello TDA!\n";
-    ABB<int>* arbol = new ABB<int>(new int(5));
-    arbol->adicionar(new int(6));
-    arbol->adicionar(new int(4));
-    int *izq = arbol->getHijoMasIzq();
+    int num = 5;
+    ABB<int> arbol(new int(5));
+    ABB<int>* arbols = &arbol;
+    ABB<int>* test = new ABB<int>(new int(5));
+    test->adicionar(new int(2));
+    test->adicionar(new int(6));
+    test->adicionar(new int(1));
+    // test->adicionar(new int(6));
+    // test->adicionar(new int(1));
+ 
+    test->printEnOrdenOne(test);
+    cout << "cambio a posorden: " << endl;
+    test->printPosOrden(test);
+    cout << "cambio a preorden: " << endl;
+    test->printPreOrden(test);
 
     // arbol->eliminar(new int(6));
-    // arbol->printEnOrden(arbol);
-    std::cout << "Arbol mas izquierdo: " << *izq << endl;
     return 0;
 }
