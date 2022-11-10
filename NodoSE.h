@@ -1,15 +1,15 @@
 #pragma once
 #include <iostream>
 using namespace std;
-template<class T> class NodoDE{
+template<class T> class NodoSE{
     protected:
         T* valor;
-        NodoDE<T>* siguiente;
+        NodoSE<T>* siguiente;
     public:
-        NodoDE(T* valor){ //Complejidad: O(1)
+        NodoSE(T* valor){ //Complejidad: O(1)
             this->valor = valor;
         }
-        ~NodoDE(){ //Complejidad: O(1)
+        ~NodoSE(){ //Complejidad: O(1)
             delete valor;
         }
         inline T* getValor(){ //Complejidad: O(1)
@@ -18,11 +18,11 @@ template<class T> class NodoDE{
         inline void setValor(T* valor){ //Complejidad: O(1)
             this->valor = valor;
         }
-        inline NodoDE<T>* getSiguiente(){ //Complejidad: O(1)
+        inline NodoSE<T>* getSiguiente(){ //Complejidad: O(1)
             return this->siguiente;
         }
 
-        inline void setSiguiente(NodoDE<T>* siguiente){ //Complejidad: O(1)
+        inline void setSiguiente(NodoSE<T>* siguiente){ //Complejidad: O(1)
             this->siguiente = siguiente;
         }
 

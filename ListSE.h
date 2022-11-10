@@ -15,7 +15,6 @@ template<class T> class ListSE : public List<T>{
             //Borrar todos los elementos de la lista
             for (int i=0; i<this->length-1;i++){ //Complejidad: O(n)
                 NodoSE<T>* rem = this->cola;
-                this->cola = this->cola->getPrevio();
                 delete rem;
             }
         }
@@ -47,7 +46,7 @@ template<class T> class ListSE : public List<T>{
             }
             else{
                 
-                NodoDE<T>* temp = this->cabeza;
+                NodoSE<T>* temp = this->cabeza;
                 //pos es la posicion donde quiero insertar
                 int posTemp = 0;
                 while(posTemp < pos-1){
@@ -69,7 +68,7 @@ template<class T> class ListSE : public List<T>{
             }
             else {
                 int posTemp = 0;
-                NodoDE<T>* temp = this->cabeza;
+                NodoSE<T>* temp = this->cabeza;
                 while (posTemp < pos){
                     temp = temp->getSiguiente();
                     posTemp++;
@@ -82,7 +81,7 @@ template<class T> class ListSE : public List<T>{
 
         int getPosition(T* element){ //Complejidad: O(n)
             int posTemp = 0;
-            NodoDE<T>* temp = this->cabeza;
+            NodoSE<T>* temp = this->cabeza;
             while (*temp->getValor() != *element){
                 temp = temp->getSiguiente();
                 posTemp++;
@@ -118,7 +117,6 @@ template<class T> class ListSE : public List<T>{
                     delete rem;
             }
 
-                // algo de aqui causa segfault
             
             this->length--;
         }

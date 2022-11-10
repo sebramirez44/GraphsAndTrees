@@ -16,7 +16,7 @@ class Direccion{
     public:
         Direccion(){
             mes = "";
-            dia = 0;
+            dia = "";
             hora = "";
             ip = "";
             razon = "";
