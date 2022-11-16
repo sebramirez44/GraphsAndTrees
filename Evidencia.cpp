@@ -3,6 +3,7 @@
 #include "Direccion.h"
 #include "ListSE.h"
 #include "ListDE.h"
+#include "Hash.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -75,24 +76,37 @@ int main(){
     getline(file,line);
     getline(file,line);
     getline(file,line);
-    getline(file,line);
 
     
     
-    ListDE<string> lista;
+    ListDE<string>* lista = new ListDE<string>;
     while(getline(file,line)){
         string *atributos = split(line);
-        lista.add(new string(atributos[3]));
+        lista->add(new string(atributos[3]));
     }
     ABB<int>* arbol = new ABB<int>;
+    //separe la IP de los demas datos, ahora contar cuantas veces sale cada ip
+    for (int i = 0; i<lista->getLength();i++){
+        cout << *lista->getElement(i) << " ";
+    }
 
-    ListDE<string>* ptrList = &lista;
-    arbol = arbol->sortAll(ptrList);
+    cout << endl;
+    cout << *lista->getElement(0);
     cout << "Los mayores elementos del arbol son: " << endl;
-    arbol->primeros(arbol);
+    Hash* hash = new Hash(arbol,lista);
+    cout << lista->contarVeces(new string("423.2.230.77:6166")) << endl;
+    cout << "length antes remove: " << lista->getLength() << endl;
+    cout << "length despues remove: " << lista->getLength() << endl;
+    hash->obtener();
+    // arbol->primeros(arbol);
     cout << "Podemos ver que todas las IPs son distintas, asi que una mejor forma de identificar ";
     cout << "usuarios, seria buscando su red" << endl;
-
+    ListDE<int>* keys = hash->getKeys();
+    // cout << keys->getLength() << endl;
+    // for (int i = 0; i < keys->getLength(); i++){
+    //     cout << "si funciona" << endl;
+    //     cout << keys->getElement(i) << endl;
+    // }
 
     return 0;
 }
