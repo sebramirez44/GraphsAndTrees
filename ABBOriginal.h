@@ -7,8 +7,6 @@ using namespace std;
 template<class T> class ABB : public ListDE<T>{
 protected:
     T* raiz;
-    int cont;
-    long int llave = 100;
     ABB<T>* izq;
     ABB<T>* der;
 
@@ -17,15 +15,11 @@ public:
         this->raiz = NULL;
         this->izq = NULL;
         this->der = NULL;
-        this->cont = 1;
-		this->llave = 0;
     };
 	ABB(T* dato){ //constructor con raiz
 		this->raiz = dato;
 		this->izq = NULL;
 		this->der = NULL;
-        this->cont = 1;
-		this->llave = 0;
 	}
     ~ABB(){
 
@@ -34,46 +28,10 @@ public:
         return this->raiz;
     };
 	bool adicionar(T* dato){ //funcion apra adicionar un elemento al arbol, O(log(n))
-        // if (!this->BuscarT(dato)){
-            if(esVacio()){
-                this->raiz = dato;
-                this->izq = NULL;
-                this->der = NULL;
-                return true;
-		    }
-            
-
-            
-            if ((*dato) < (*this->raiz)){ //si es menor al dato lo ponemos en la izquierda.
-                if (this->izq == NULL && *dato != *this->raiz){
-                    this->izq = new ABB<T>(dato);
-                    return true;
-                }
-                return this->izq->adicionar(dato); //si hay un arbol en la izquierda se hace recursion con ese arbol.
-            }
-            else if((*dato) > (*this->raiz)){
-                if (this->der == NULL && *dato != *this->raiz){ //si es mayor y no hay nada en la derecha se agrega
-                    this->der = new ABB<T>(dato);
-                    return true;
-                }
-                return this->der->adicionar(dato); //si hay un arbol en la derecha, recursion con ese arbol
-            }
-            
-            else{
-                this->cont++;
-            }
-     
-        
-        return false;
-
-    };
-    
-    bool adicionar(T* dato, long int key){ //funcion apra adicionar un elemento al arbol, O(log(n))
         if(esVacio()){
             this->raiz = dato;
             this->izq = NULL;
             this->der = NULL;
-			this->llave = key;
 
             return true;
 		}
@@ -82,64 +40,21 @@ public:
 				this->izq = new ABB<T>(dato);
 				return true;
 			}
-            return this->izq->adicionar(dato, key); //si hay un arbol en la izquierda se hace recursion con ese arbol.
+            return this->izq->adicionar(dato); //si hay un arbol en la izquierda se hace recursion con ese arbol.
         }
-        else if((*dato) > (*this->raiz)){
+        else {
 			if (this->der == NULL){ //si es mayor y no hay nada en la derecha se agrega
 				this->der = new ABB<T>(dato);
 				return true;
 			}
-            return this->der->adicionar(dato, key); //si hay un arbol en la derecha, recursion con ese arbol
-        }
-        else if((*dato) == (*this->raiz)){
-			this->cont++;
-
+            return this->der->adicionar(dato); //si hay un arbol en la derecha, recursion con ese arbol
         }
         return false;
 
     };
-	bool addArbol(ABB<long int>* dato){
-		if(esVacio()){
-                this->raiz = new long int(dato->cont);
-                this->izq = NULL;
-                this->der = NULL;
-				this->llave = *dato->getRaiz();
-											cout << "PORFAVOR PORFAVOR NO TENGO TIEMPO" << endl;
-
-                return true;
-		    }
-		cout << "count: " << dato->cont << " raiz: " << *this->raiz << endl;
-        if ((dato->cont) < (*this->raiz)){ //si es menor al dato lo ponemos en la izquierda.
-            if (this->izq == NULL && dato->cont != *this->raiz){
-                    this->izq = new ABB<long int>(new long int(dato->cont));
-					this->llave = *dato->getRaiz();
-							cout << "PORFAVOR PORFAVOR NO TENGO TIEMPO" << endl;
-
-                    return true;
-                }
-                return this->izq->addArbol(dato); //si hay un arbol en la izquierda se hace recursion con ese arbol.
-            }
-            else if((dato->cont) > (*this->raiz)){
-                if (this->der == NULL && dato->cont != *this->raiz){ //si es mayor y no hay nada en la derecha se agrega
-                    this->der = new ABB<long int>(new long int(dato->cont));
-					this->llave = *dato->getRaiz();
-					cout << "PORFAVOR PORFAVOR NO TENGO TIEMPO" << endl;
-
-                    return true;
-                }
-                return this->der->addArbol(dato); //si hay un arbol en la derecha, recursion con ese arbol
-            }
-            
-            else{
-                this->cont++;
-            }
-     
-        
-        return false;
-
-    };
 
 
+	
 
     bool eliminar(T* raiz) //funcion para eliminar un arbol
 	{
@@ -265,8 +180,8 @@ public:
 		}
 		return nivel;
 	};
-    
-    bool esVacio()
+
+	bool esVacio()
 	{
 		return this->raiz == NULL;
 	};
@@ -292,9 +207,6 @@ public:
 	ABB<T>* getHijoIzq(){
 		return this->izq;
 	}
-    ABB<T>* getHijoDer(){
-        return this->der;
-    }
 
 	T* getHijoMasDer()
 	{
@@ -406,51 +318,6 @@ public:
 		return cont + !this->izq->esVacio() ? this->izq->getSubArbolesConDosDescendientes() : 0
 					+ !this->der->esVacio() ? this->der->getSubArbolesConDosDescendientes() : 0;
 	};
-    
-    
-    ABB<T>* getLeft(){
-        return this->izq;
-    };
-    int getKey(){
-        return this->llave;
-    }
-    int getCont(){
-        return this->cont;
-    }
-    void getArbolLlave(ABB<long int>* arbolOrg){
-        if (arbolOrg !=NULL) {
-			getArbolLlave(arbolOrg->izq);
-            this->addArbol(arbolOrg);
-			getArbolLlave(arbolOrg->der);
-		}
-		
-	}
-	void setArbolLlave(ABB<long int>* arbolOrg){
-        if (arbolOrg !=NULL) {
-			getArbolLlave(arbolOrg->izq);
-            this->llave = *arbolOrg->getRaiz();
-			this->raiz = arbolOrg->getKey();
-			getArbolLlave(arbolOrg->der);
-		}
-	}
 
-	bool BuscarLong(long int dato){
-		ABB<long int>* arbol = new ABB<long int>(this->raiz);
-		arbol->izq = this->izq;
-		arbol->der = this->der;
-		while(*arbol->getRaiz() != dato){ //la funcion busca el dato en el arbol y por cada nivel que baja
-			if (arbol->getRaiz() == NULL){
-				break;
-			}
-			if(dato > *arbol->getRaiz()){ //se agrega 1 a count, de esta forma nos da su nivel.
-				arbol = arbol->der;
-			}
-			else if(dato < *arbol->getRaiz()){
-				arbol = arbol->izq;
-			}
-			return true;
-		}
-		return false;
-	}
-    
+
 };
