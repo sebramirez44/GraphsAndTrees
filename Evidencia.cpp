@@ -9,53 +9,18 @@
 #include <fstream>
 #include <sstream>
 using namespace std;
-int toInt(char c){
-    switch(c){
-        case '0':
-            return 0;
-            break;
-        case '1':
-            return 1;
-            break;
-        case '2':
-            return 2;
-            break;
-        case '3':
-            return 3;
-            break;
-        case '4':
-            return 4;
-            break;
-        case '5':
-            return 5;
-            break;
-        case '6':
-            return 6;
-            break;
-        case '7':
-            return 7;
-            break;
-        case '8':
-            return 8;
-            break;
-        case '9':
-            return 9;
-            break;
-    }
-
-};
-string* split(string sentence){
+string* split(string sentence){ //O(n)
+//funcion para separar el string a un array.
             static string arr[5] = {""};
             string adicionar = "";
             int letras = 0;
             int contador = 0;
             for (int i = 0; i < sentence.length();i++){
                 letras++;
-                if (sentence[i] == ' ' && contador < 4){
+                if (sentence[i] == ' ' && contador < 4){ //separamos el string en los espacios
                     arr[contador] = adicionar;
                     adicionar = "";
                     contador++;
-                    // i++;
                 }
                 else{
                     adicionar = adicionar + sentence[i];
@@ -66,7 +31,7 @@ string* split(string sentence){
 
             return arr;
 };
-string removePuntos(string dato){
+string removePuntos(string dato){//le quitamos los puntos al string ip O(n)
     string final = "";
     for (int i = 0; i<dato.size(); i++){
         if (dato[i] != '.' && dato[i] != ':'){
@@ -75,14 +40,8 @@ string removePuntos(string dato){
     }
     return final;
 };
-int Sint(string dato){
-    int temp = 0;
-    for (int i = 0; i < dato.length(); i++){
-        temp = toInt(dato[i]) + 10*temp;
-    }
-    return temp;
-};
-string Network(string dato){
+
+string Network(string dato){ //convertimos el string ip a un string de red. O(n)
     string final = "";
     for (int i = 0; i<dato.size(); i++){
         if(dato[i] == '.'){
@@ -94,99 +53,40 @@ string Network(string dato){
     }
     return final;
 }
-//es un problem acon mi funcion
-
-// ABBCont<int>* ordenar (ABB<long int>* dato, ABB<int>* desorden){
-//     if (!dato->esHoja()){
-        
-//     }
-// }
 
 int main(){
+    //archivo
     ifstream file("bitacora.txt");
     string line;
-    string test;
-    string arr[5] = {" "};
     getline(file,line);
     getline(file,line);
     getline(file,line);
     getline(file,line);
 
-    
-    
-    ListDE<string>* lista = new ListDE<string>;
+    //inicializamos el arbol que utilizaremos para guardar las IPs y su numero de veces (atributo cont)    
     ABB<long int>* arbol = new ABB<long int>;
     string temp;
     long int dato = 0;
-    while(getline(file,line)){
-        string *atributos = split(line);
+
+    while(getline(file,line)){//mientras no nos hemos terminado el archivo O(n)
+        string *atributos = split(line); //
         temp = atributos[3];
-        lista->add(new string(temp));
-        temp = removePuntos(temp);
+        // temp = removePuntos(temp); utilizariamos esto para checar cada ip completa, sin embargo no haremos eso porque cada ip es unica
+        temp = Network(temp);
         dato = stoul(temp);
         arbol->adicionar(new long int(dato));
     }
-    // ABB<long int>* arbol2 = new ABB<long int>(new long int(arbol->getCont()));
-    ABB<long int>* arbol2 = new ABB<long int>(new long int);
-
-    arbol2->getArbolLlave(arbol);
-    dato = stoul(*lista->getElement(0));
-    cout << "Se encontro el dato: " << arbol2->BuscarLong(dato) << endl;
-
-    cout << "arbol2: " << arbol2->getHijoIzq()->getKey() << endl;
-    cout << "arbol2: " << *arbol2->getHijoIzq()->getRaiz() << endl;
-    
-    // arbol->visit(2);
-    // long int veryLong = 799714375997;
-    // arbolCont->adicionar(new int(1),veryLong);
-    // arbolCont->adicionar(new int(arbol->getKey()),*arbol->getRaiz());
-    // cout << "arbol: " << *arbol->getRaiz() << endl;
-    // cout << "arbol izq: " << *arbol->getHijoIzq()->getRaiz();
-    //algo en visit causa error
-    // cout << "RAIZ ES: " << *arbolCont->getHijoIzq()->getRaiz() << endl;
-    //separe la IP de los demas datos, ahora ` cuantas veces sale cada ip
+    ABB<long int>* arbol2 = new ABB<long int>; //arbol en el que tendremos el numero de veces que ocurre como la raiz y la ip como la llave
+    arbol2->getArbolLlave(arbol); //inicializamos el arbol utilizando el otro arbol, pero utilizamos cont() de arbol como la raiz de arbol2 y la raiz de arbol como la llave de arbol2
     cout << endl;
-    cout << "Los mayores elementos del arbol son: ";
-    // Hash* hash = new Hash(arbol,lista);
-    // test.append(" ");
-    cout << *arbol2->getRaiz() << " " << arbol2->getKey() << endl;
-    // stringstream intS(test);
-    // intS >> testInt;
-
-    // hash->obtener();
-    // arbol->primeros(arbol);
-    file.close();
-    cout << "Podemos ver que todas las IPs son distintas, asi que una mejor forma de identificar ";
-    cout << "usuarios, seria buscando su red de la siguiente forma: " << endl;
-
-    ifstream arch("bitacora.txt");
-    getline(arch,line);
-    getline(arch,line);
-    getline(arch,line);
-    getline(arch,line);
-
-    ABB<long int>* arbolNet = new ABB<long int>;
-
-    while(getline(arch,line)){
-        string *atributos = split(line);
-        temp = atributos[3];
-        lista->add(new string(temp));
-        temp = Network(temp);
-        dato = stoul(temp);
-        arbolNet->adicionar(new long int(dato));
+    cout << "los maximos por red son: " << endl;
+    for (int i = 0; i <= 5; i++){ //mostramos los elementos mas grandes
+        arbol2->kthLargest(arbol2,i);
     }
-    // arbolNet->visit(2);
-    // cout << "raiz: " << *arbolNet->getRaiz() << "valor: " << arbolNet->getCont() << endl;
-    // cout << endl;
-    // ABB<long int>* arbol3 = new ABB<long int>;
-    // cout << endl << "raiz3: " << *arbol3->getRaiz() << "valor3: " << *arbol3->getRaiz() << endl;
-
-    // ListDE<int>* keys = hash->getKeys();
-    // cout << keys->getLength() << endl;
-    // for (int i = 0; i < keys->getLength(); i++){
-    //     cout << "si funciona" << endl;
-    //     cout << keys->getElement(i) << endl;
-    // }
-
+    cout << endl;
+    file.close();
+    
+    
+    
     return 0;
 }

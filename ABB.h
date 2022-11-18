@@ -6,9 +6,10 @@ using namespace std;
 
 template<class T> class ABB : public ListDE<T>{
 protected:
-    T* raiz;
-    int cont;
+    long int* raiz;
+    long int cont;
     long int llave = 100;
+	int counter = 0;
     ABB<T>* izq;
     ABB<T>* der;
 
@@ -98,33 +99,29 @@ public:
         return false;
 
     };
-	bool addArbol(ABB<long int>* dato){
-		if(esVacio()){
+	bool addArbol(ABB<long int>* dato){ //funcion apra adicionar un arbol al arbol, O(log(n))
+            if(esVacio()){
                 this->raiz = new long int(dato->cont);
                 this->izq = NULL;
                 this->der = NULL;
-				this->llave = *dato->getRaiz();
-											cout << "PORFAVOR PORFAVOR NO TENGO TIEMPO" << endl;
-
+				this->llave = *dato->raiz;
                 return true;
 		    }
-		cout << "count: " << dato->cont << " raiz: " << *this->raiz << endl;
-        if ((dato->cont) < (*this->raiz)){ //si es menor al dato lo ponemos en la izquierda.
-            if (this->izq == NULL && dato->cont != *this->raiz){
-                    this->izq = new ABB<long int>(new long int(dato->cont));
-					this->llave = *dato->getRaiz();
-							cout << "PORFAVOR PORFAVOR NO TENGO TIEMPO" << endl;
+            
 
+            
+            if ((dato->cont) < (*this->raiz)){ //si es menor a la raiz del arbol dato lo ponemos en la izquierda.
+                if (this->izq == NULL && dato->cont != *this->raiz){
+                    this->izq = new ABB<T>(new long int(dato->cont));
+					this->izq->llave = *dato->raiz;
                     return true;
                 }
                 return this->izq->addArbol(dato); //si hay un arbol en la izquierda se hace recursion con ese arbol.
             }
-            else if((dato->cont) > (*this->raiz)){
-                if (this->der == NULL && dato->cont != *this->raiz){ //si es mayor y no hay nada en la derecha se agrega
-                    this->der = new ABB<long int>(new long int(dato->cont));
-					this->llave = *dato->getRaiz();
-					cout << "PORFAVOR PORFAVOR NO TENGO TIEMPO" << endl;
-
+            else if((dato->cont) >= (*this->raiz)){
+                if (this->der == NULL){ //si es mayor y no hay nada en la derecha se agrega
+                    this->der = new ABB<T>(new long int(dato->cont));
+					this->der->llave = *dato->raiz;
                     return true;
                 }
                 return this->der->addArbol(dato); //si hay un arbol en la derecha, recursion con ese arbol
@@ -132,14 +129,13 @@ public:
             
             else{
                 this->cont++;
+				return true;
             }
      
         
         return false;
 
     };
-
-
 
     bool eliminar(T* raiz) //funcion para eliminar un arbol
 	{
@@ -318,6 +314,9 @@ public:
 			case 4:
 				printLevelbyLevel(arbol);
 				break;
+			case 5:
+				// printMax();
+				break;
 			default:
 				cout << "argumento invlido" << endl;
 				break;	
@@ -344,10 +343,63 @@ public:
 	void printEnOrden(ABB<T>* arbol){ //funcion que imprime el arbol en orden. O(n)
 		if (arbol !=NULL) {
 			printEnOrden(arbol->izq);
-			cout << *arbol->getRaiz() << " ";
+			cout << arbol->getCont() << " ";
 			printEnOrden(arbol->der);
 		}
 	};
+
+	void kthLargestUtil(ABB<T>* root, int k, int &c)
+{
+    //caso base
+    if (root == NULL || c >= k)
+        return;
+  
+    //en orden al revez
+    kthLargestUtil(root->der, k, c);
+  
+    // Invrementamos la cantidad de nodos visitados
+    c++;
+  
+	//si c se convierte en k, este es el mayor
+    if (c == k)
+    {
+        cout << "La ip "
+             << root->getKey() << " Con " << *root->getRaiz() << " accesos."<< endl;
+        return;
+    }
+	//recursividad izq
+    kthLargestUtil(root->izq, k, c);
+}
+  
+void kthLargest(ABB<T> *root, int k)
+{
+    // Inicializamos la cantidad de nodos visitados como 0
+    int c = 0;
+  
+    // c entra por referencia
+    kthLargestUtil(root, k, c);
+}
+	void printNthNode(ABB<T>* dato, int N)
+	{
+		if(dato == NULL)
+			return;
+
+		int index = 0;
+
+		//para cada nodo primero vamos al de la derecha
+		printNthNode(dato->der, N);
+
+
+		//Ahora el nodo actual es el mayor
+		if(++index == N)
+		{
+			printf("%d\n", dato->getKey());
+			return;
+		}
+
+		//Recursividad izquierda
+		printNthNode(dato->izq, N);
+	}
 	
     
     
@@ -417,40 +469,15 @@ public:
     int getCont(){
         return this->cont;
     }
-    void getArbolLlave(ABB<long int>* arbolOrg){
+    void getArbolLlave(ABB<long int>* arbolOrg){ //O(log(n)) funcion para cambiar llave y raiz del arbol.
         if (arbolOrg !=NULL) {
-			getArbolLlave(arbolOrg->izq);
+			this->getArbolLlave(arbolOrg->izq);
             this->addArbol(arbolOrg);
-			getArbolLlave(arbolOrg->der);
+			this->getArbolLlave(arbolOrg->der);
 		}
 		
 	}
-	void setArbolLlave(ABB<long int>* arbolOrg){
-        if (arbolOrg !=NULL) {
-			getArbolLlave(arbolOrg->izq);
-            this->llave = *arbolOrg->getRaiz();
-			this->raiz = arbolOrg->getKey();
-			getArbolLlave(arbolOrg->der);
-		}
-	}
+	
 
-	bool BuscarLong(long int dato){
-		ABB<long int>* arbol = new ABB<long int>(this->raiz);
-		arbol->izq = this->izq;
-		arbol->der = this->der;
-		while(*arbol->getRaiz() != dato){ //la funcion busca el dato en el arbol y por cada nivel que baja
-			if (arbol->getRaiz() == NULL){
-				break;
-			}
-			if(dato > *arbol->getRaiz()){ //se agrega 1 a count, de esta forma nos da su nivel.
-				arbol = arbol->der;
-			}
-			else if(dato < *arbol->getRaiz()){
-				arbol = arbol->izq;
-			}
-			return true;
-		}
-		return false;
-	}
     
 };
